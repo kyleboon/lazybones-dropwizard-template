@@ -26,6 +26,10 @@ apply plugin: 'shadow'
 version=currentVersion
 group=currentGroup
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.6'
+}
+
 // Run code narc before the test phase begins
 test.dependsOn codenarcMain
 
