@@ -8,23 +8,23 @@ shortcuts to the commands for running migrations and starting the service.
 
 Enjoy!
 
-<proj>
-      +- src
-          +- main
-          |   +- groovy
-          |   |     +- your.package.structure
-          |   |           +- core
-          |   |           +- db
-          |   |           +- healthchecks
-          |   |           +- resources
-          |   |           +- core
-          |   +- resources
-          |
-          +- test
-              +- groovy
-              |     +- // Spock tests in here!
-              +- resources
-                    +- fixtures
+    <proj>
+        +- src
+            +- main
+            |   +- groovy
+            |   |     +- your.package.structure
+            |   |           +- core
+            |   |           +- db
+            |   |           +- healthchecks
+            |   |           +- resources
+            |   |           +- core
+            |   +- resources
+            |
+            +- test
+                +- groovy
+                |     +- // Spock tests in here!
+                +- resources
+                      +- fixtures
 
 # Running The Application
 
