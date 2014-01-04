@@ -11,9 +11,7 @@ filterFiles("src/main/groovy/packageName/ServiceNameConfiguration.groovy", filte
 
 // move to user specified directory structure
 def packageDirectoryStructure = filterProperties.packageName.replace('.', '/')
-new AntBuilder().move( todir: "${targetDir}/src/main/groovy/${packageDirectoryStructure}") {
-    fileset( dir:"${targetDir}/src/main/groovy/packageName" )
-}
+FileUtils.moveDirectory("${targetDir}/src/main/groovy/packageName", "${targetDir}/src/main/groovy/${packageDirectoryStructure}")
 
 // move to user specified service name
 def serviceFile = new File("${targetDir}/src/main/groovy/${packageDirectoryStructure}/ServiceNameService.groovy")
