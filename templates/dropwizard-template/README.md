@@ -36,7 +36,7 @@ To test the example application run the following commands.
 
 * To package the example run.
 
-        gradle shadow
+        gradle shadowJar
 
 * To drop an existing h2 database run.
 
