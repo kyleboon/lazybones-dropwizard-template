@@ -13,7 +13,7 @@ buildscript {
 apply plugin: "lazybones-templates"
 
 lazybones {
-    repositoryUrl = "https://api.bintray.com/content/kyleboon/"
+    repositoryUrl = "https://api.bintray.com/content/kyleboon/lazybones"
     repositoryUsername = project.bintrayUsername
     repositoryApiKey = project.bintrayApiKey
 }
