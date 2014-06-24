@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
+
 buildscript {
     repositories {
         mavenLocal()
@@ -32,27 +34,35 @@ repositories {
     maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
+
 dependencies {
     groovy "org.codehaus.groovy:groovy-all:${groovyVersion}"
 
-    compile "com.yammer.dropwizard:dropwizard-core:${dropwizardVersion}"
-    compile "com.yammer.dropwizard:dropwizard-testing:${dropwizardVersion}"
-    compile "com.yammer.dropwizard:dropwizard-hibernate:${dropwizardVersion}"
-    compile "com.yammer.dropwizard:dropwizard-migrations:${dropwizardVersion}"
-    compile "com.yammer.dropwizard:dropwizard-auth:${dropwizardVersion}"
-    compile "com.yammer.dropwizard:dropwizard-client:${dropwizardVersion}"
-    compile "com.yammer.dropwizard:dropwizard-views:${dropwizardVersion}"
-
-    compile 'com.h2database:h2:1.3.170'
-
-    testCompile "com.yammer.dropwizard:dropwizard-testing:${dropwizardVersion}"
-    testCompile "org.spockframework:spock-core:1.0-groovy-2.0-SNAPSHOT"
-    testRuntime "cglib:cglib-nodep:2.2.2"          // allows mocking of classes (in addition to interfaces)
-    testRuntime "org.objenesis:objenesis:1.2"    // allows mocking of classes without default constructor (together with CGLIB)
+    compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
+    compile "io.dropwizard:dropwizard-testing:${dropwizardVersion}"
+    compile "io.dropwizard:dropwizard-hibernate:${dropwizardVersion}"
+    compile "io.dropwizard:dropwizard-migrations:${dropwizardVersion}"
+    compile "io.dropwizard:dropwizard-migrations:${dropwizardVersion}"
+    compile "io.dropwizard:dropwizard-jackson:${dropwizardVersion}"
+    compile "io.dropwizard:dropwizard-auth:${dropwizardVersion}"
+    compile "io.dropwizard:dropwizard-client:${dropwizardVersion}"
+    compile "io.dropwizard:dropwizard-assets:${dropwizardVersion}"
+    compile "io.dropwizard:dropwizard-views:${dropwizardVersion}"
+    compile "org.slf4j:jul-to-slf4j:1.7.2"
+    compile "org.slf4j:slf4j-api:1.7.2"
 
     // needed for validation tests so logging in hibernate validator does not throw exception
     compile 'ch.qos.logback:logback-classic:1.0.7'
     compile "org.slf4j:log4j-over-slf4j:1.7.2"
+
+    compile 'com.h2database:h2:1.3.170'
+
+    testCompile "io.dropwizard:dropwizard-testing:${dropwizardVersion}"
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.0-SNAPSHOT"
+    testCompile 'org.slf4j:log4j-over-slf4j:1.7.2'
+    testRuntime "cglib:cglib-nodep:2.2.2"          // allows mocking of classes (in addition to interfaces)
+    testRuntime "org.objenesis:objenesis:1.2"    // allows mocking of classes without default constructor (together with CGLIB)
+
 }
 
 jar {
@@ -79,6 +89,7 @@ codenarc {
 }
 
 shadow {
+    transformer(ServiceFileTransformer)
     exclude 'META-INF/*.DSA'
     exclude 'META-INF/*.RSA'
 }
@@ -88,7 +99,7 @@ task run(dependsOn: 'shadowJar', group: 'dropwizard',  description: "Run service
     def props = project.ext.properties.findAll { it.key.startsWith('dw') }
     javaexec {
         main = '-jar'
-        args = ["${shadow.shadowJar.getPath()}", 'server', 'dev_config.yml']
+        args = ["${shadow.shadowJar.getPath()}", 'server', 'appconfig.yml']
         systemProperties = props
     }
 }
@@ -96,13 +107,13 @@ task run(dependsOn: 'shadowJar', group: 'dropwizard',  description: "Run service
 task migrate(dependsOn: 'shadowJar', group: 'dropwizard', description: "Run migrations using the dev configuration") << {
     javaexec {
         main = '-jar'
-        args = ["${shadow.shadowJar.getPath()}", 'db', 'migrate', 'dev_config.yml']
+        args = ["${shadow.shadowJar.getPath()}", 'db', 'migrate', 'appconfig.yml']
     }
 }
 
 task dropAll(dependsOn: 'shadowJar', group: 'dropwizard',  description: "Run drop-all database command") << {
     javaexec {
         main = '-jar'
-        args = ["${shadow.shadowJar.getPath()}", 'db', 'drop-all', 'dev_config.yml', '--confirm-delete-everything']
+        args = ["${shadow.shadowJar.getPath()}", 'db', 'drop-all', 'appconfig.yml', '--confirm-delete-everything']
     }
 }

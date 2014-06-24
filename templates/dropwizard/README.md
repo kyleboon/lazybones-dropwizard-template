@@ -1,10 +1,13 @@
 # Introduction
 
-You have created an dropwizard application using lazybones. The application will start but it has no resources
-configured for it yet. To find out where to go from here, visit the [dropwizard documentation](dropwizard.codahale.com).
+You have created an dropwizard application using lazybones. This application uses dropwizard 0.7.0 version.
+Use previous versions of the lazybone templates for previous versions.
 
-There is a working service, liquibase migrations, hibernate support and a basic gradle build system including some
-shortcuts to the commands for running migrations and starting the service.
+The application will start and will have sample resource impl, that you can hit to verify the application.
+For more detailed documentation about a dropwizard application refer to http://dropwizard.github.io/dropwizard/getting-started.html.
+
+
+This application is configure to use hibernate for database access, liquibase for migrations and dropwizard asset bundle.
 
 Enjoy!
 
@@ -17,7 +20,6 @@ Enjoy!
             |   |           +- db
             |   |           +- healthchecks
             |   |           +- resources
-            |   |           +- core
             |   +- resources
             |
             +- test
@@ -32,7 +34,7 @@ To test the example application run the following commands.
 
 * To run the tests run
 
-`gradle test`
+        gradle test
 
 * To package the example run.
 
@@ -46,9 +48,7 @@ To test the example application run the following commands.
 
         gradle migrate
 
-* To run the server run.
+* To run the application run.
 
         gradle run
-
-
 
