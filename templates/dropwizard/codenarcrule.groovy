@@ -1,5 +1,5 @@
 ruleset {
-    description 'Bloom Health CodeNarc Rules'
+    description 'CodeNarc Rules'
 
     ruleset('rulesets/basic.xml') {
         'EmptyMethod' enabled: false
@@ -27,7 +27,10 @@ ruleset {
         'FieldName' enabled: false
     }
     ruleset('rulesets/security.xml')
-    ruleset('rulesets/size.xml')
+    ruleset('rulesets/size.xml') {
+        // enable it for cobertura
+        'CrapMetric' enabled: false
+    }
     ruleset('rulesets/unnecessary.xml') {
 
         // disabling due to code narc bug => http://sourceforge.net/tracker/?func=detail&atid=1126573&aid=3524882&group_id=250145

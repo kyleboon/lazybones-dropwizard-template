@@ -1,26 +1,40 @@
 import org.apache.commons.io.FileUtils
 
-def filterProperties = [:]
-filterProperties.group = ask("Define value for 'group': ")
-filterProperties.version = ask("Define value for 'version' [0.1]: ", "0.1")
+def props = [:]
+props.group = ask("Define value for 'group': ", "group")
+props.version = ask("Define value for your application 'version' [0.1]: ", "version", "0.1")
+props.packageName = ask("Define value for package structure: ", "packageName")
+props.applicationName = ask("Define value for the name of the application: ", "applicationName").capitalize()
 
-filterProperties.packageName = ask("Define value for package structure: ")
-filterProperties.serviceName = ask("Define value for the name of the service: ")
+processTemplates "gradle.properties", props
+processTemplates "src/main/groovy/packageName/ApplicationName*.groovy", props
 
-processTemplates("gradle.properties", filterProperties)
-processTemplates("src/main/groovy/packageName/ServiceNameService.groovy", filterProperties)
-processTemplates("src/main/groovy/packageName/ServiceNameConfiguration.groovy", filterProperties)
+// new package structure
+def packageDirectoryStructure = props.packageName.replace('.', '/')
 
-// move to user specified directory structure
-def packageDirectoryStructure = filterProperties.packageName.replace('.', '/')
 def existingDirectory = new File("${targetDir}/src/main/groovy/packageName")
-def newDirectory = new File("${targetDir}/src/main/groovy/${packageDirectoryStructure}")
 
-FileUtils.moveDirectory(existingDirectory, newDirectory)
 
-// move to user specified service name
-def serviceFile = new File("${targetDir}/src/main/groovy/${packageDirectoryStructure}/ServiceNameService.groovy")
-serviceFile.renameTo("${targetDir}/src/main/groovy/${packageDirectoryStructure}/${filterProperties.serviceName}Service.groovy")
+def resourceFile = new File("${targetDir}/src/main/groovy/packageName/ApplicationNameResource.groovy")
+FileUtils.moveFile(resourceFile, new File("${targetDir}/src/main/groovy/${packageDirectoryStructure}/resources/${props.applicationName}Resource.groovy"))
 
-def configurationFile = new File("${targetDir}/src/main/groovy/${packageDirectoryStructure}/ServiceNameConfiguration.groovy")
-configurationFile.renameTo("${targetDir}/src/main/groovy/${packageDirectoryStructure}/${filterProperties.serviceName}Configuration.groovy")
+def dbFile = new File("${targetDir}/src/main/groovy/packageName/ApplicationNameDomain.groovy")
+FileUtils.moveFile(dbFile, new File("${targetDir}/src/main/groovy/${packageDirectoryStructure}/db/${props.applicationName}Domain.groovy"))
+
+def configurationFile = new File("${targetDir}/src/main/groovy/packageName/ApplicationNameConfiguration.groovy")
+FileUtils.moveFile(configurationFile, new File("${targetDir}/src/main/groovy/${packageDirectoryStructure}/${props.applicationName}Configuration.groovy"))
+
+def appFile = new File("${targetDir}/src/main/groovy/packageName/ApplicationNameApplication.groovy")
+FileUtils.moveFile(appFile, new File("${targetDir}/src/main/groovy/${packageDirectoryStructure}/${props.applicationName}Application.groovy"))
+
+def coreDir = new File("${targetDir}/src/main/groovy/${packageDirectoryStructure}/core/")
+FileUtils.forceMkdir(coreDir)
+
+def healthCheckDir = new File("${targetDir}/src/main/groovy/${packageDirectoryStructure}/healthchecks/")
+FileUtils.forceMkdir(healthCheckDir)
+
+new File("${targetDir}/src/main/groovy/${packageDirectoryStructure}/core/.retain").createNewFile()
+new File("${targetDir}/src/main/groovy/${packageDirectoryStructure}/healthchecks/.retain").createNewFile()
+
+
+FileUtils.deleteDirectory(existingDirectory)
