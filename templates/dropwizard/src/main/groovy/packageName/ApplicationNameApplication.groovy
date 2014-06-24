@@ -20,14 +20,14 @@ class ${applicationName}Application extends Application<${applicationName}Config
     }
 
     @Override
-    public void run(HelloWorldConfiguration configuration,
+    public void run(${applicationName}Configuration configuration,
                     Environment environment) throws ClassNotFoundException {
         log.debug('Running ...' + name)
         environment.jersey().register(new ${applicationName}Resource())
     }
 
     @Override
-    public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
+    public void initialize(Bootstrap<${applicationName}Configuration> bootstrap) {
         bootstrap.with {
             addBundle migrationsBundle
             addBundle hibernateBundle
