@@ -12,6 +12,7 @@ processTemplates "src/main/groovy/packageName/ApplicationName*.groovy", props
 // new package structure
 def packageDirectoryStructure = props.packageName.replace('.', '/')
 
+String targetDir = projectDir.path
 def existingDirectory = new File("${targetDir}/src/main/groovy/packageName")
 
 

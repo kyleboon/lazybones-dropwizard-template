@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
-
 buildscript {
     repositories {
         mavenLocal()
@@ -9,23 +7,17 @@ buildscript {
         }
     }
     dependencies {
-        classpath "net.saliman:gradle-cobertura-plugin:1.1.0"
-        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:2.0.16'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:0.8'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.0.0'
     }
 }
 
-apply plugin: 'cobertura'
 apply plugin: 'codenarc'
 apply plugin: 'groovy'
 apply plugin: 'maven'
-apply plugin: 'shadow'
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
 
-version=currentVersion
-group=currentGroup
-
-// Run code narc before the test phase begins
-test.dependsOn codenarcMain
+mainClassName=mainClass
 
 repositories {
     mavenLocal()
@@ -36,7 +28,7 @@ repositories {
 
 
 dependencies {
-    groovy "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
 
     compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
     compile "io.dropwizard:dropwizard-testing:${dropwizardVersion}"
@@ -67,7 +59,6 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class': "${mainClass}"
         attributes 'Built-Date': new Date() //now
         attributes 'Built-By': System.getProperty('user.name')
         attributes 'Build-Jdk': System.getProperty('java.version')
@@ -77,43 +68,19 @@ jar {
     }
 }
 
-cobertura {
-    coverageFormats = ['xml', 'html']
-    coverageIncludes = ['**/*.java', '**/*.groovy']
-    coverageSourceDirs = [sourceSets.main.allSource.srcDirs]
-}
-
 codenarc {
     configFile = rootProject.file('codenarcrule.groovy')
     reportFormat = System.properties['codeNarcOutput'] ?: 'html'
 }
 
-shadow {
-    transformer(ServiceFileTransformer)
-    exclude 'META-INF/*.DSA'
-    exclude 'META-INF/*.RSA'
+shadowJar {
+  mergeServiceFiles()
 }
 
-task run(dependsOn: 'shadowJar', group: 'dropwizard',  description: "Run service using dev configuration") << {
-    // Grab any dw. properties that are specified on the command line and pass to the Java process (i.e. dw.http.port=8080)
-    def props = project.ext.properties.findAll { it.key.startsWith('dw') }
-    javaexec {
-        main = '-jar'
-        args = ["${shadow.shadowJar.getPath()}", 'server', 'appconfig.yml']
-        systemProperties = props
-    }
+run {
+    args 'server', "src/main/resources/appconfig.yml"
 }
 
-task migrate(dependsOn: 'shadowJar', group: 'dropwizard', description: "Run migrations using the dev configuration") << {
-    javaexec {
-        main = '-jar'
-        args = ["${shadow.shadowJar.getPath()}", 'db', 'migrate', 'appconfig.yml']
-    }
-}
-
-task dropAll(dependsOn: 'shadowJar', group: 'dropwizard',  description: "Run drop-all database command") << {
-    javaexec {
-        main = '-jar'
-        args = ["${shadow.shadowJar.getPath()}", 'db', 'drop-all', 'appconfig.yml', '--confirm-delete-everything']
-    }
+runShadow {
+    args 'server', "src/main/resources/appconfig.yml"
 }
