@@ -9,6 +9,9 @@ import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import java.util.concurrent.TimeUnit
 
+/**
+ * Created by lazybones dw template.
+ */
 @Path('/lazybones')
 @Produces(MediaType.APPLICATION_JSON)
 @Slf4j

@@ -7,9 +7,12 @@ import io.dropwizard.db.DataSourceFactory
 import io.dropwizard.hibernate.HibernateBundle
 import io.dropwizard.migrations.MigrationsBundle
 import groovy.util.logging.Slf4j
-import ${packageName}.db.*
-import ${packageName}.resources.*
+import ${packageName}.db.${applicationName}Domain
+import ${packageName}.resources.${applicationName}Resource
 
+/**
+ * Created by lazybones dw template.
+ */
 @Slf4j
 class ${applicationName}Application extends Application<${applicationName}Configuration> {
 
