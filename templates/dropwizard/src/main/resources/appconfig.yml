@@ -11,7 +11,7 @@ database:
   password: sa
 
   # the JDBC URL
-  url: jdbc:h2:example
+  url: "jdbc:h2:mem:"
 
 # HTTP-specific options.
 server:

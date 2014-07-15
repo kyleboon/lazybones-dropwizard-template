@@ -6,6 +6,9 @@ import javax.persistence.Id
 import javax.persistence.Table
 import groovy.transform.ToString
 
+/**
+ * Created by lazybones dw template.
+ */
 @Entity
 @Table(name = 'lazybones')
 @ToString

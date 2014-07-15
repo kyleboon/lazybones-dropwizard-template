@@ -1,9 +1,9 @@
 import org.apache.commons.io.FileUtils
 
 def props = [:]
-props.group = ask("Define value for 'group': ", "group")
-props.version = ask("Define value for your application 'version' [0.1]: ", "version", "0.1")
-props.packageName = ask("Define value for package structure: ", "packageName")
+props.group = ask("Define value for 'group' [com.company]: ", "com.company", "group")
+props.version = ask("Define value for your application 'version' [0.1]: ", "0.1", "version")
+props.packageName = ask("Define value for package structure [com.company]: ", "com.company", "packageName")
 props.applicationName = ask("Define value for the name of the application: ", "applicationName").capitalize()
 
 processTemplates "gradle.properties", props

@@ -6,6 +6,9 @@ import io.dropwizard.db.DataSourceFactory
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
+/**
+ * Created by lazybones dw template.
+ */
 class ${applicationName}Configuration extends Configuration {
 
     @Valid

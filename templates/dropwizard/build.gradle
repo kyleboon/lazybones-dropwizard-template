@@ -7,7 +7,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.0.0'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.0.1'
     }
 }
 
@@ -33,7 +33,6 @@ dependencies {
     compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
     compile "io.dropwizard:dropwizard-testing:${dropwizardVersion}"
     compile "io.dropwizard:dropwizard-hibernate:${dropwizardVersion}"
-    compile "io.dropwizard:dropwizard-migrations:${dropwizardVersion}"
     compile "io.dropwizard:dropwizard-migrations:${dropwizardVersion}"
     compile "io.dropwizard:dropwizard-jackson:${dropwizardVersion}"
     compile "io.dropwizard:dropwizard-auth:${dropwizardVersion}"
@@ -81,6 +80,6 @@ run {
     args 'server', "src/main/resources/appconfig.yml"
 }
 
-runShadow {
+runShadow {dependsOn 'shadowJar'
     args 'server', "src/main/resources/appconfig.yml"
 }
